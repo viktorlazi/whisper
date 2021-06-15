@@ -1,11 +1,11 @@
 import LoginStore from './Stores/LoginStore';
-import {useHistory} from 'react-router-dom';
+import routes from '../../routes';
+import {observer} from 'mobx-react';
 const store = new LoginStore();
-const redirect = useHistory();
 
 function Login() {
   return <form>
-    <h1>Login <p onClick={()=>{redirect.push('/register')}}>or register</p></h1>
+    <h1>Login <p onClick={()=>{window.location.href = routes.app + '/register';}}>or register</p></h1>
     <p>username:</p>
     <input value={store.username} onChange={e=>store.setUsername(e.target.value)} type="text" />
     <p>password:</p>
@@ -18,4 +18,4 @@ function Login() {
     </p>
   </form>
 }
-export default Login;
+export default observer(Login);

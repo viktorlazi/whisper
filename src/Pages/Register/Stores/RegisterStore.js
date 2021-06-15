@@ -22,6 +22,10 @@ export default class RegisterStore{
   }
   login = (e) =>{
     e.preventDefault();
+    if(!this.username || !this.password || this.repeatPassword){
+      this.errorMessage = 'empty fields';
+      return;
+    }
     this.setPassword('');
     this.setRepeatPassword('');
     if(this.password === this.repeatPassword){
