@@ -1,5 +1,5 @@
 import RegisterStore from './Stores/RegisterStore';
-import routes from '../../routes';
+import routes from '../../webRoutes';
 import {observer} from 'mobx-react';
 const store = new RegisterStore();
 
