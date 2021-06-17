@@ -1,0 +1,23 @@
+.contact{
+  display:flex;
+  justify-content: space-between;
+  padding:10px;
+  border-bottom:1px solid lightgray;
+  align-items: center;
+  padding-right: 15px;
+}
+.contact:hover, .contact.active{
+  background-color: lightgray;
+}
+.contact_left{
+  display:flex;
+  flex-direction: column;
+}
+.contact_left > h4{
+  font-weight: 500;
+  padding: 2px;
+  margin:0;
+}
+.contact_left > p{
+  margin:5px 0;
+}
