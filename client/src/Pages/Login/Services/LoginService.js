@@ -1,6 +1,6 @@
 import routes from '../../../webRoutes';
 
-export default class LoginService{as
+export default class LoginService{
   login = async (username, password) =>{
     const post = {
       method: 'POST',
@@ -15,5 +15,6 @@ export default class LoginService{as
     return fetch(routes.serverApi + "/login", post)
     .then(response => response.json())
     .then(result => result.json())
+    .catch(err => err);
   }
 }

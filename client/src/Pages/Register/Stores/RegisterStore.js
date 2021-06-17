@@ -1,4 +1,5 @@
 import {makeAutoObservable} from 'mobx';
+import routes from '../../../webRoutes';
 import RegisterService from '../Services/RegisterService';
 
 export default class RegisterStore{
@@ -20,7 +21,7 @@ export default class RegisterStore{
   setRepeatPassword = (x) =>{
     this.repeatPassword = x;
   }
-  login = (e) =>{
+  register = async (e) =>{
     e.preventDefault();
     if(!this.username || !this.password || this.repeatPassword){
       this.errorMessage = 'empty fields';
@@ -29,11 +30,15 @@ export default class RegisterStore{
     this.setPassword('');
     this.setRepeatPassword('');
     if(this.password === this.repeatPassword){
-      this.service.login(this.username, this.password)
-      .catch(err=>{
-        this.errorMessage = err;
-      });
-      return;
+      const result = await this.service.register(this.username, this.password);
+      if(result.status){
+        sessionStorage.setItem('user_token', result.token);
+        sessionStorage.setItem('username', this.username);
+        window.location.href = routes.serverApi + '/chat';
+        return {success: true, err: null}
+      }else{
+        return {success: false, err: result.error}
+      }
     }
     this.errorMessage = 'repeat password doesn\'t match';
   }

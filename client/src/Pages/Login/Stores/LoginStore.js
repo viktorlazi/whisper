@@ -1,5 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 import LoginService from '../Services/LoginService';
+import routes from '../../../webRoutes';
 
 export default class LoginStore{
   username = '';
@@ -24,19 +25,14 @@ export default class LoginStore{
     }
     this.setPassword('');
     const result = await this.service.login(this.username, this.password);
-    if(result.err){
-      this.errorMessage = result;
-      console.log(this.errorMessage)
+    this.errorMessage = result.toString();
+    if(result.status){
+      sessionStorage.setItem('user_token', result.token);
+      sessionStorage.setItem('username', this.username);
+      window.location.href = routes.serverApi + '/chat';
+      return {success: true, err: null}
+    }else{
+      return {success: false, err: result.error}
     }
-    /**
-     * if(result.status){
-          sessionStorage.setItem('user_token', result.token);
-          sessionStorage.setItem('username', username);
-          window.location.href = routes.serverApi + '/chat';
-          return {success: true, err: null}
-        }else{
-          return {success: false, err: result.error}
-        }
-     */
   }
 }

@@ -1,20 +1,20 @@
-import * as io from "socket.io" 
+import * as io from "socket.io" ;
 import express from 'express'; 
 import {createServer} from 'http'; 
-import cors from 'cors'
-import mongo_pass from './mongo_pass.js'
-import mongoose from 'mongoose'
-import {add_user} from './register.js'
-import {login_user, logout_user} from './login.js'
-import token from './models/LoginToken.js'
-import User from './models/User.js'
-import {sendContacts, sendMessages} from './fetch.js'
-import Message from './models/Message.js'
+import cors from 'cors';
+import mongo_pass from './mongo_pass.js';
+import mongoose from 'mongoose';
+import {add_user} from './register.js';
+import {login_user, logout_user} from './login.js';
+import token from './models/LoginToken.js';
+import User from './models/User.js';
+import {sendContacts, sendMessages} from './fetch.js';
+import Message from './models/Message.js';
 
 const app = express();
 const server = createServer(app);
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 const socketio = new io.Server(server);
 
 //mongo
@@ -23,13 +23,13 @@ mongoose.connect(connection_url, {
   useCreateIndex: true,
   useNewUrlParser:true,
   useUnifiedTopology:true
-})
+});
 const db = mongoose.connection; 
 db.once('open', ()=>{
-  console.log('db ok')
+  console.log('db ok');
 })
 
-let clientConnections = []
+let clientConnections = [];
 let messages = [];
 
 socketio.on('connection', async (socket) => {
