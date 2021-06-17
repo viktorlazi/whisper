@@ -1,4 +1,3 @@
-import React from 'react'
 import './noChat.css';
 
 export default function NoChat() {

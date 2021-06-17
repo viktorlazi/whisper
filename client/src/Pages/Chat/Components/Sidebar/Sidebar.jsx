@@ -11,46 +11,6 @@ function Sidebar({socket, activeChat, changeActive, contacts, setContacts}) {
   const [newContact, setNewContact] = useState('');
   const history = useHistory();
   
-  const logout = (e)=>{
-    e.preventDefault()
-    fetch("http://localhost:4000/api/logout",{
-      method: 'POST',
-      body:JSON.stringify({
-        token:sessionStorage.getItem('user_token')
-      }),
-      headers:{
-        "Content-Type": "application/json"
-      }
-    })
-    .catch(err => console.log(err))
-    sessionStorage.clear();
-    history.push('/login')
-  }
-  const addContact = async (e) =>{
-    e.preventDefault()
-    if(newContact !== ''){
-      if(!contacts.find(e=>e.name===newContact)){
-        socket.emit('new contact', newContact)
-      }else{
-        setErrorMessage('already added')
-      }
-      setNewContact('')
-    }
-  }
-  useEffect(() => {
-    socket.on('contact list', (list)=>{
-      setContacts(list)
-    })
-    socket.on('contact approved', contactDetails=>{
-      setContacts(contacts=>[...contacts, contactDetails]);
-      setErrorMessage('')
-    })
-    socket.on('contact nonexistent', ()=>{
-      setErrorMessage('user non existent');
-    })
-  }, [socket, setContacts, contacts])
-
-
   return (
     <div className="sidebar">
       <div className="sidebar_header">

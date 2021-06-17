@@ -1,5 +1,4 @@
 import { Avatar } from '@material-ui/core'
-import React from 'react'
 import './contact.css'
 
 function Contact({contacts, active, activate}) {

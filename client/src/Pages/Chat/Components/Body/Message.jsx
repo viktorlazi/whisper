@@ -1,4 +1,3 @@
-import React from 'react'
 
 function Message({message, receiver, sender, timestamp}) {
   if(sender){
