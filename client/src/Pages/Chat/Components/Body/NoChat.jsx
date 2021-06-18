@@ -1,4 +1,4 @@
-import './noChat.css';
+import './style/noChat.css';
 
 export default function NoChat() {
 	return (

@@ -1,9 +1,12 @@
-
+import Sidebar from './Components/Sidebar/Sidebar';
+import Body from './Components/Body/Body';
+import './style/chat.css';
 
 function Chat() {
   return (
-    <div>
-      
+    <div className="chat">
+      <Sidebar />
+      <Body />
     </div>
   )
 }

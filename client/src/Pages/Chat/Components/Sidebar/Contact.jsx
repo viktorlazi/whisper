@@ -1,5 +1,5 @@
 import { Avatar } from '@material-ui/core'
-import './contact.css'
+import './style/contact.css'
 
 function Contact({contacts, active, activate}) {
   return (
