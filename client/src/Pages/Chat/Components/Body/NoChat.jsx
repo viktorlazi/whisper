@@ -5,8 +5,10 @@ export default function NoChat() {
 		<div className="no_chat">
 			<div className="text">
 				<h1>Welcome to Whisper</h1>
-				<p>Whisper does not store your messages.</p>
-				<p>Whisper only stores your hashed password and contacts(optional)</p>
+				<p>- Whisper does not store your messages.</p>
+				<p>- Whisper cannot read your messages.</p>
+				<p>- Your messages are encrypted with E2EE.</p>
+				<p>- Whisper only stores your hashed password and contacts (optional).</p>
 			</div>
 		</div>
 	)
