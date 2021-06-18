@@ -1,12 +1,11 @@
 import { Avatar } from '@material-ui/core'
 import './style/contact.css'
 
-function Contact({contacts, active, activate}) {
+function Contact({name, activate, active}) {
   return (
-    <div onClick={()=>{activate(contacts.name)}} className={`contact ${active?" active":""}`}>
+    <div onClick={activate} className={`contact ${active?" active":""}`}>
       <div className="contact_left">
-        <h4>{contacts.name}</h4>
-        <p>{contacts.last}</p>
+        <h4>{name}</h4>
       </div>
       <Avatar/>
     </div>
