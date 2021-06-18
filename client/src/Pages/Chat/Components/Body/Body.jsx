@@ -6,14 +6,14 @@ import Message from './Message';
 import {observer} from 'mobx-react';
 import NoChat from './NoChat';
 
-function ChatBody({store, active}) { 
-  if(active){
+function Body({store}) { 
+  if(store.name){
     return (
       <div className="chat_body">
         <div className="chat_header">
           <div className="chat_headerInfo">
             <Avatar />
-            <h2>{}</h2>
+            <h2>{store.name}</h2>
           </div>
           <div className="chat_headerRight">
             <IconButton >
@@ -40,4 +40,4 @@ function ChatBody({store, active}) {
   return(<NoChat/>);
 }
 
-export default observer(ChatBody)
+export default observer(Body)

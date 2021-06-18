@@ -1,10 +1,9 @@
 import {makeAutoObservable} from 'mobx';
 
 export default class BodyStore{
-  
-  
-
-  constructor(){
+  name;
+  constructor(name){
+    this.name = name;
     makeAutoObservable(this);
   }
 }

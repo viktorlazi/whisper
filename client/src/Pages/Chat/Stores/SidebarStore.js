@@ -4,8 +4,10 @@ import ContactStore from './ContactStore';
 export default class SidebarStore{
   contacts = [];
   active = null;
+  changeChat;
 
-  constructor(){
+  constructor(changeChat){
+    this.changeChat = changeChat;
     makeAutoObservable(this);
     this.contacts.push(new ContactStore('viktor'));
     this.contacts.push(new ContactStore('filip'));
@@ -13,5 +15,6 @@ export default class SidebarStore{
   }
   toggleActive = (contact) =>{
     this.active = contact;
+    this.changeChat(contact);
   }
 }
