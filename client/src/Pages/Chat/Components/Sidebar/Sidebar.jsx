@@ -24,8 +24,7 @@ function Sidebar() {
         
       </div>
       <form className="sidebar_add_new">
-        <p>+Add contact [Enter]</p>
-        <input type="text"></input>
+        <input type="text" placeholder={'type a name and press enter'}></input>
         <p id="add_contact_error_message">{}</p>
         <button id="addContact" type="submit"></button>
       </form>

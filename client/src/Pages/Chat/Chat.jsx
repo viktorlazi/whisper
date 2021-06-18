@@ -9,8 +9,8 @@ const store = new ChatStore();
 function Chat() {
   return (
     <div className="chat">
-      <Sidebar store={store.sidebarStore} />
-      <Body store={store.bodyStore} />
+      <Sidebar store={store.sidebarStore} active={store.active} />
+      <Body store={store.bodyStore} active={store.active} />
     </div>
   )
 }

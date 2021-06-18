@@ -6,8 +6,8 @@ import Message from './Message';
 import {observer} from 'mobx-react';
 import NoChat from './NoChat';
 
-function ChatBody() { 
-  if(true){
+function ChatBody({store, active}) { 
+  if(active){
     return (
       <div className="chat_body">
         <div className="chat_header">
