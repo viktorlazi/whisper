@@ -5,7 +5,7 @@ import {Avatar, IconButton} from '@material-ui/core'
 import './style/sidebar.css';
 import {observer} from 'mobx-react';
 
-function Sidebar({store, active}) {
+function Sidebar({store}) {
   return (
     <div className="sidebar">
       <div className="sidebar_header">
@@ -26,8 +26,8 @@ function Sidebar({store, active}) {
               return (
                 <Contact 
                   name={contact.name}
-                  activate={()=>store.activate(contact.name)}
-                  active={contact.name === active}
+                  activate={()=>store.toggleActive(contact.name)}
+                  active={contact.name === store.active}
                   key={Math.random()}
                 />
               )
