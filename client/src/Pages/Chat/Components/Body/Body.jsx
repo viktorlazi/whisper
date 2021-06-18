@@ -25,7 +25,17 @@ function Body({store}) {
           </div>
         </div>
         <div className="chat_meat">
-          
+          {
+            store.messages.map(
+              (msg) =>{
+                return <Message 
+                  message={msg.content}
+                  timestamp={msg.timestamp}
+                  isGreen={msg.sender !== store.name}
+                />
+              }
+            )
+          }
         </div>
         
         <div className="chat_footer">
