@@ -1,9 +1,10 @@
-import {Avatar, IconButton} from '@material-ui/core'
+import {Avatar, IconButton} from '@material-ui/core';
 import WhatshotIcon from '@material-ui/icons/WhatshotOutlined';
 import BlockIcon from '@material-ui/icons/Block';
-import './style/chatBody.css'
-import Message from './Message'
-import NoChat from './NoChat'
+import './style/chatBody.css';
+import Message from './Message';
+import {observer} from 'mobx-react';
+import NoChat from './NoChat';
 
 function ChatBody() { 
   if(true){
@@ -39,4 +40,4 @@ function ChatBody() {
   return(<NoChat/>);
 }
 
-export default ChatBody
+export default observer(ChatBody)

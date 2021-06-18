@@ -4,6 +4,7 @@ import WhatshotIcon from '@material-ui/icons/WhatshotOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {Avatar, IconButton} from '@material-ui/core'
 import './style/sidebar.css'
+import {observer} from 'mobx-react';
 
 function Sidebar() {
   return (
@@ -35,4 +36,4 @@ function Sidebar() {
   )
 }
 
-export default Sidebar;
+export default observer(Sidebar);
