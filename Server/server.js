@@ -37,6 +37,15 @@ let messages = [];
 socketio.on('connection', (socket)=>{
   console.log('new socket');
   socket.emit('contact list', ['viktor', 'filip']);
+  const msg = [{
+    content:'alo',
+    timestamp:'danas',
+    sender:'viktor'
+  }];
+  socket.on('messages', ()=>{
+    console.log('me')
+    socket.emit('messages', msg);
+  });
 });
 
 /*

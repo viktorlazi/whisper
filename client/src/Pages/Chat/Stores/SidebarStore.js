@@ -18,6 +18,7 @@ export default class SidebarStore{
     this.changeChat(contact);
   }
   initContactListListener = () =>{
+    this.contacts = [];
     this.socketService.socket.on('contact list', (list)=>{
       list.forEach(e => {
         this.contacts.push(new ContactStore(e));
