@@ -5,6 +5,7 @@ export default class SidebarStore{
   contacts = [];
   socketService;
   active = null;
+  newContact = '';
   changeChat;
 
   constructor(changeChat, socketService){
@@ -17,12 +18,22 @@ export default class SidebarStore{
     this.active = contact;
     this.changeChat(contact);
   }
+  setNewContact = (x) =>{
+    this.newContact = x;
+  }
   initContactListListener = () =>{
-    this.contacts = [];
     this.socketService.socket.on('contact list', (list)=>{
+      this.contacts = [];
       list.forEach(e => {
         this.contacts.push(new ContactStore(e));
       });
     });
+  }
+  fetchNewContact = (e) =>{
+    e.preventDefault();
+    if(this.newContact){
+      this.socketService.socket.emit('fetch new contact', this.newContact);
+    }
+    this.newContact = '';
   }
 }

@@ -35,9 +35,9 @@ function Sidebar({store}) {
         }
       </div>
       <form className="sidebar_add_new">
-        <input type="text" placeholder={'type a name and press enter'}></input>
+        <input type="text" value={store.newContact} onChange={e=>store.setNewContact(e.target.value)} placeholder="type a name and press enter"></input>
         <p id="add_contact_error_message">{}</p>
-        <button id="addContact" type="submit"></button>
+        <button onClick={store.fetchNewContact} id="addContact" type="submit"></button>
       </form>
       <div className="sidebar_logout">
         <button id="logout" type="submit">Log out</button>

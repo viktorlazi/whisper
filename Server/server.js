@@ -46,6 +46,11 @@ socketio.on('connection', (socket)=>{
     console.log('me')
     socket.emit('messages', msg);
   });
+  socket.on('fetch new contact', (name)=>{
+    console.log(name);
+    socket.emit('contact list', ['viktor', 'filip', 'branko']);
+  });
+
 });
 
 /*
