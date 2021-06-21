@@ -1,19 +1,18 @@
 import {makeAutoObservable} from 'mobx';
 import SidebarStore from './SidebarStore';
 import BodyStore from './BodyStore';
-import ChatService from '../Services/ChatService';
+import HttpService from '../Services/HttpService';
+import SocketService from '../Services/SocketService';
 
 export default class ChatStore{
   contacts = [];
-  socket;
-  service = new ChatService();
-  socket;
+  httpService = new HttpService();
+  socketService = new SocketService();
   bodyStore = new BodyStore();
-  sidebarStore = new SidebarStore(cont => this.changeChat(cont));  
+  sidebarStore = new SidebarStore(cont => this.changeChat(cont), this.socketService);  
 
   constructor(){
     makeAutoObservable(this);
-    //this.socket = this.service.initSocket();
   }
   changeChat = (contact) =>{
     this.bodyStore = null;

@@ -18,21 +18,30 @@ app.use(express.json());
 const socketio = new io.Server(server);
 
 //mongo
-const connection_url = "mongodb+srv://admin:" + mongo_pass + "@cluster0.lkgyy.mongodb.net/whisper?retryWrites=true&w=majority";
+/*const connection_url = "mongodb+srv://admin:" + mongo_pass + "@cluster0.lkgyy.mongodb.net/whisper?retryWrites=true&w=majority";
 mongoose.connect(connection_url, {
   useCreateIndex: true,
   useNewUrlParser:true,
   useUnifiedTopology:true
 });
+
 const db = mongoose.connection; 
 db.once('open', ()=>{
   console.log('db ok');
 })
+*/
 
 let clientConnections = [];
 let messages = [];
 
+socketio.on('connection', (socket)=>{
+  console.log('new socket');
+  socket.emit('contact list', ['viktor', 'filip']);
+});
+
+/*
 socketio.on('connection', async (socket) => {
+  console.log('conn');
   const clientToken = await token.findOne(
     {token:socket.handshake.auth.token}
     ).lean()
@@ -118,7 +127,7 @@ socketio.on('connection', async (socket) => {
     socket.emit('not logged in')
   }
 });
-
+*/
 //post get
 app.post('/api/register', async (req, res) =>{
   add_user(req.body).then(result=>res.send(result))
@@ -149,4 +158,4 @@ app.get('/api/delete_all_accounts', async (req, res)=>{
   res.sendStatus(200)
 })
 
-server.listen(4000)
+server.listen(4000);
