@@ -1,12 +1,9 @@
 import User from './models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import LoginToken from './models/LoginToken.js';
-
-const JWT_SECRET = 'WZZWZEklsdjf293e098r**?2--sdfwefewmlfkwef2l3krnfs lefkjwefekjwelfj777244$-_4';
+import JWT_SECRET from './jwt_secret.js';
 
 export const login_user = async(body)=>{
-  const user_token = await LoginToken.findOne({"for":body.username});
   const user = await User.findOne({"username":body.username});
   if(!user){
     return {status:'error', error:'invalid username/password'};
@@ -21,25 +18,8 @@ export const login_user = async(body)=>{
         username:user.username
       },
       JWT_SECRET
-      )
-      LoginToken.create({
-        token:token,
-        for:body.username
-      });
-      return {status:'ok', token:token};// contacts:[...user.contacts]}
-    }
+    );
+    return {status:'ok', token:token};
+  }
   return {status:'error', error:'invalid username/password'};
-}
-
-export const logout_user = async(body)=>{
-  LoginToken.deleteOne({'token':body.token}).exec()
-  .then(
-    () =>{
-      return {status:'ok'};
-    }
-  ).catch(
-    () =>{
-      return {status:'error', error:'not even logged in'};
-    }
-  )
 }

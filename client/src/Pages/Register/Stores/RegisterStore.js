@@ -23,20 +23,24 @@ export default class RegisterStore{
   }
   register = async (e) =>{
     e.preventDefault();
-    if(!this.username || !this.password || this.repeatPassword){
+
+    if(!this.username || !this.password || !this.repeatPassword){
       this.errorMessage = 'empty fields';
       return;
     }
-    this.setPassword('');
-    this.setRepeatPassword('');
     if(this.password === this.repeatPassword){
       const result = await this.service.register(this.username, this.password);
+      console.log(result);
       if(result.status){
         sessionStorage.setItem('user_token', result.token);
         sessionStorage.setItem('username', this.username);
         window.location.href = routes.serverApi + '/chat';
+        this.setPassword('');
+        this.setRepeatPassword('');
         return {success: true, err: null}
       }else{
+        this.setPassword('');
+        this.setRepeatPassword('');
         return {success: false, err: result.error}
       }
     }

@@ -7,7 +7,7 @@ export default class SidebarStore{
   active = null;
   newContact = '';
   changeChat;
-
+  
   constructor(changeChat, socketService){
     this.socketService = socketService;
     this.changeChat = changeChat;

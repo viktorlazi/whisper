@@ -14,7 +14,8 @@ function Landing() {
             previewAccount4
         */
       }
-      alo
+      <h1>
+      </h1>
     </div>
   )
 }
