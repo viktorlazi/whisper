@@ -1,5 +1,7 @@
 import './style/style.css';
 import {useState} from 'react';
+import Login from './Login/Login';
+import Register from './Register/Register';
 
 function NotAuthenticated() {
   const [toggleSystem, setToggleSystem] = useState(false);
@@ -11,8 +13,8 @@ function NotAuthenticated() {
       </label>
       {
         toggleSystem?
-        <p>register</p>
-        :<p>login</p>
+        <Register />
+        :<Login />
       }
     </div>
   )
