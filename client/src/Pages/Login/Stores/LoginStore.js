@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import LoginService from '../Services/LoginService';
 import routes from '../../../webRoutes';
 
@@ -23,13 +23,16 @@ export default class LoginStore{
       this.errorMessage = 'empty fields';
       return;
     }
-    this.setPassword('');
     const result = await this.service.login(this.username, this.password);
-    this.errorMessage = result.toString();
+    runInAction(()=>{
+      this.errorMessage = result.toString();
+    });
+    this.setPassword('');
     if(result.status){
+      console.log(result)
       sessionStorage.setItem('user_token', result.token);
       sessionStorage.setItem('username', this.username);
-      window.location.href = routes.serverApi + '/chat';
+      //window.location.href = routes.serverApi + '/chat';
       return {success: true, err: null}
     }else{
       return {success: false, err: result.error}

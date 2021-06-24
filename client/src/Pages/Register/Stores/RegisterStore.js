@@ -34,7 +34,7 @@ export default class RegisterStore{
       if(result.status){
         sessionStorage.setItem('user_token', result.token);
         sessionStorage.setItem('username', this.username);
-        window.location.href = routes.serverApi + '/chat';
+        //window.location.href = routes.serverApi + '/chat';
         this.setPassword('');
         this.setRepeatPassword('');
         return {success: true, err: null}

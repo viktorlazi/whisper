@@ -20,7 +20,7 @@ export const add_user = async(body)=>{
 }
 
 const pass_validation = (pass)=>{
-  if(pass.length < 8){
+  if(pass.length < 2){
     return false;
   }
   return true;

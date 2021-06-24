@@ -148,7 +148,6 @@ socketio.on('connection', async (socket) => {
 */
 //post get
 app.post('/api/register', async (req, res) =>{
-  console.log('registering')
   add_user(req.body).then(result=>res.send(result))
 })
 app.post('/api/login', async (req, res) =>{
