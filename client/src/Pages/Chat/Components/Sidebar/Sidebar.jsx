@@ -4,6 +4,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {Avatar, IconButton} from '@material-ui/core'
 import './style/sidebar.css';
 import {observer} from 'mobx-react';
+import LoginSystem from './LoginSystem/LoginSystem';
 
 function Sidebar({store}) {
   return (
@@ -39,9 +40,7 @@ function Sidebar({store}) {
         <p id="add_contact_error_message">{}</p>
         <button onClick={store.fetchNewContact} id="addContact" type="submit"></button>
       </form>
-      <div className="sidebar_logout">
-        <button id="logout" type="submit">Log out</button>
-      </div>
+      <LoginSystem />
     </div>
   )
 }
