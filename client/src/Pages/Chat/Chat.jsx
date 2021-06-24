@@ -9,7 +9,7 @@ const store = new ChatStore();
 function Chat() {
   return (
     <div className="chat">
-      <Sidebar 
+      <Sidebar
         store={store.sidebarStore}
       />
       <Body 

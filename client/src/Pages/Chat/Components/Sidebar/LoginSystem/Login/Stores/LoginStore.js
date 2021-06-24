@@ -17,7 +17,7 @@ export default class LoginStore{
   setPassword = (x) =>{
     this.password = x;
   }
-  login = async (e) =>{
+  login = async (e, getToken) =>{
     e.preventDefault();
     if(!this.username || !this.password){
       this.errorMessage = 'empty fields';
@@ -31,7 +31,6 @@ export default class LoginStore{
     if(result.status){
       console.log(result)
       sessionStorage.setItem('token', result.token);
-      window.location.href = routes.app + '/chat';
       return {success: true, err: null}
     }else{
       return {success: false, err: result.error}

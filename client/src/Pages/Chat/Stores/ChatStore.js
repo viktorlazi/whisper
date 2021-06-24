@@ -4,7 +4,6 @@ import BodyStore from './BodyStore';
 import SocketService from '../Services/SocketService';
 
 export default class ChatStore{
-  jwt;
   contacts = [];
   messages = [];
   socketService = new SocketService();

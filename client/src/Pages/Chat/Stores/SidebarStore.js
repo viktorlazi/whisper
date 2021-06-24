@@ -9,9 +9,9 @@ export default class SidebarStore{
   changeChat;
   
   constructor(changeChat, socketService){
+    makeAutoObservable(this);
     this.socketService = socketService;
     this.changeChat = changeChat;
-    makeAutoObservable(this);
     this.initContactListListener();
   }
   toggleActive = (contact) =>{
