@@ -16,7 +16,7 @@ export default class LoginService{
     .then(response => response.json())
     .then(result => {
       console.log(result)
-      return result
+      return result;
     })
     .catch(err => err);
   }

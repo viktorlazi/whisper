@@ -30,9 +30,8 @@ export default class LoginStore{
     this.setPassword('');
     if(result.status){
       console.log(result)
-      sessionStorage.setItem('user_token', result.token);
-      sessionStorage.setItem('username', this.username);
-      //window.location.href = routes.serverApi + '/chat';
+      sessionStorage.setItem('token', result.token);
+      window.location.href = routes.app + '/chat';
       return {success: true, err: null}
     }else{
       return {success: false, err: result.error}
