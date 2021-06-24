@@ -1,0 +1,15 @@
+#login h1{
+  font-size: 25px;
+}
+#login h1 p{
+  font-size: 15px;
+  color: blue;
+  cursor: pointer;
+}
+
+#login button{
+  margin: 10px;
+}
+#errorMessage{
+  color: red;
+}

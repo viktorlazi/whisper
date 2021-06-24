@@ -11,7 +11,7 @@ export const add_user = async(body)=>{
         "username":body.username,
         "password":hashedPassword,
         "contacts":[]
-      });
+      }); 
       return {status:'ok'};
     }else{
       return {error:'unsuccesful'};

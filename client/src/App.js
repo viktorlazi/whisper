@@ -1,5 +1,5 @@
 import './App.css';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {HashRouter as Router, Route} from 'react-router-dom';
 
 import Register from './Pages/Register/Register';
 import Login from './Pages/Login/Login';

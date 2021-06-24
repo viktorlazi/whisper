@@ -6,7 +6,6 @@ import mongo_pass from './mongo_pass.js';
 import mongoose from 'mongoose';
 import {add_user} from './register.js';
 import {login_user} from './login.js';
-import token from './models/LoginToken.js';
 import User from './models/User.js';
 import {sendContacts, sendMessages} from './fetch.js';
 import Message from './models/Message.js';
@@ -30,7 +29,7 @@ try{
   const db = mongoose.connection; 
   db.once('open', ()=>{
     console.log('db ok');
-  })
+  });
 }catch(e){
   console.log(e)
 }
@@ -149,6 +148,7 @@ socketio.on('connection', async (socket) => {
 */
 //post get
 app.post('/api/register', async (req, res) =>{
+  console.log('registering')
   add_user(req.body).then(result=>res.send(result))
 })
 app.post('/api/login', async (req, res) =>{

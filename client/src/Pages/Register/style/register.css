@@ -1,0 +1,15 @@
+#register h1{
+  font-size: 25px;
+}
+#register h1 p{
+  font-size: 15px;
+  color: blue;
+  cursor: pointer;
+}
+
+#register button{
+  margin: 10px;
+}
+#errorMessage{
+  color: red;
+}

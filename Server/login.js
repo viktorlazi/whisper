@@ -14,7 +14,6 @@ export const login_user = async(body)=>{
     }
     const token = jwt.sign(
       {
-        id:user._id, 
         username:user.username
       },
       JWT_SECRET
