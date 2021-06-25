@@ -18,7 +18,6 @@ const socketio = new io.Server(server);
 
 //mongo
 try{
-
   const connection_url = "mongodb+srv://admin:" + mongo_pass + "@cluster0.lkgyy.mongodb.net/whisper?retryWrites=true&w=majority";
   mongoose.connect(connection_url, {
     useCreateIndex: true,
@@ -33,7 +32,6 @@ try{
 }catch(e){
   console.log(e)
 }
-
 
 let clientConnections = [];
 let messages = [];

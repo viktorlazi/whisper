@@ -11,9 +11,11 @@ export default class BodyStore{
     this.initMessageListener();
   }
   initMessageListener = () =>{
-    this.socketService.socket.emit('messages');
-    this.socketService.socket.on('messages', (messages)=>{
-      this.messages = messages;
-    });
+    if(this.socketService.socket){
+      this.socketService.socket.emit('messages');
+      this.socketService.socket.on('messages', (messages)=>{
+        this.messages = messages;
+      });
+    }
   }
 }

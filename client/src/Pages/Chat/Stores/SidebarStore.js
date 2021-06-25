@@ -22,16 +22,18 @@ export default class SidebarStore{
     this.newContact = x;
   }
   initContactListListener = () =>{
-    this.socketService.socket.on('contact list', (list)=>{
-      action(()=>{
-        this.contacts = [];
-      });
-      list.forEach(e => {
+    if(this.socketService.socket){
+      this.socketService.socket.on('contact list', (list)=>{
         action(()=>{
-          this.contacts.push(new ContactStore(e));
+          this.contacts = [];
+        });
+        list.forEach(e => {
+          action(()=>{
+            this.contacts.push(new ContactStore(e));
         });
       });
     });
+  }
   }
   fetchNewContact = (e) =>{
     e.preventDefault();
