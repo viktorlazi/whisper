@@ -8,9 +8,6 @@ export const login_user = async(body)=>{
   if(!user){
     return {status:'error', error:'invalid username/password'};
   }
-  console.log(user.password);
-  console.log('pass:' + body.password);
-  console.log(await bcrypt.compare(body.password, user.password));
   if(await bcrypt.compare(body.password, user.password)){
     const token = jwt.sign(
       {

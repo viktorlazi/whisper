@@ -11,7 +11,7 @@ function LoginSystem() {
       {
         tokenStore.token?
         <Authenticated clearToken={tokenStore.clearToken} />
-        :<NotAuthenticated setToken={tokenStore.setToken} />
+        :<NotAuthenticated setToken={(x)=>tokenStore.setToken(x)} />
       }
     </div>
   )

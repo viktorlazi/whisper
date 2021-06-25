@@ -13,8 +13,8 @@ function NotAuthenticated({setToken}) {
       </label>
       {
         toggleSystem?
-        <Register setToken={setToken} />
-        :<Login setToken={setToken} />
+        <Register setToken={(x)=>setToken(x)} />
+        :<Login setToken={(x)=>{setToken(x)}} />
       }
     </div>
   )

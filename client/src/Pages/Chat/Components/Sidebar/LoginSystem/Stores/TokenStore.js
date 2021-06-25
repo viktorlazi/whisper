@@ -16,10 +16,13 @@ export default class TokenStore{
     }), 1000);
   }
   clearToken = () =>{
-    this.token = null;
     sessionStorage.clear();
+    this.token = null;
   }
   setToken = (x) =>{
-    this.token = x;
+    if(x){
+      sessionStorage.setItem('token', x);
+      this.token = x;
+    }
   }
 }

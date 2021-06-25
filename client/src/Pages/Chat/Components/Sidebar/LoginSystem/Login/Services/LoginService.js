@@ -14,10 +14,7 @@ export default class LoginService{
     };
     return fetch(routes.serverApi + "/login", post)
     .then(response => response.json())
-    .then(result => {
-      console.log(result)
-      return result;
-    })
+    .then(result => result)
     .catch(err => err);
   }
 }

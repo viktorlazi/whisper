@@ -16,8 +16,7 @@ export default class LoginStore{
   setPassword = (x) =>{
     this.password = x;
   }
-  login = async (e) =>{
-    e.preventDefault();
+  login = async () =>{
     if(!this.username || !this.password){
       this.errorMessage = 'empty fields';
       return;
@@ -28,11 +27,16 @@ export default class LoginStore{
     });
     this.setPassword('');
     if(result.token){
-      console.log(result)
-      sessionStorage.setItem('token', result.token);
-      return {success: true, err: null}
+      return {success: true, err: null, token:result.token}
     }else{
       return {success: false, err: result.error}
+    }
+  }
+  setToken = async (e, send) =>{
+    e.preventDefault();
+    const result = await this.login(); 
+    if(result.token){
+      send(result.token);
     }
   }
 }

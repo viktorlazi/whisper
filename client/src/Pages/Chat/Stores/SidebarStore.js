@@ -23,7 +23,9 @@ export default class SidebarStore{
   }
   initContactListListener = () =>{
     this.socketService.socket.on('contact list', (list)=>{
-      this.contacts = [];
+      action(()=>{
+        this.contacts = [];
+      });
       list.forEach(e => {
         action(()=>{
           this.contacts.push(new ContactStore(e));

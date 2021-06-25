@@ -14,7 +14,7 @@ export default class RegisterService{
     };
     return fetch(routes.serverApi + "/register", post)
     .then(response => response.json())
-    .then(result => {console.log(result); return result.json();})
+    .then(result => result)
     .catch(err => err);
   }
 }

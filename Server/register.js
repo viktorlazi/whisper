@@ -1,5 +1,7 @@
 import User from './models/User.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import JWT_SECRET from './jwt_secret.js';
 
 export const add_user = async(body)=>{
   if(await User.findOne({'username':body.username}, (err,data)=>{})){
@@ -12,7 +14,13 @@ export const add_user = async(body)=>{
         "password":hashedPassword,
         "contacts":[]
       }); 
-      return {status:'ok'};
+      const token = jwt.sign(
+        {
+          username:body.username
+        },
+        JWT_SECRET
+      );
+      return {status:'ok', token:token};
     }else{
       return {error:'unsuccesful'};
     }

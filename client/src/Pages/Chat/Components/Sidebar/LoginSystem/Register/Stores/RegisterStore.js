@@ -20,19 +20,15 @@ export default class RegisterStore{
   setRepeatPassword = (x) =>{
     this.repeatPassword = x;
   }
-  register = async (e) =>{
-    e.preventDefault();
-
+  register = async () =>{
     if(!this.username || !this.password || !this.repeatPassword){
       this.errorMessage = 'empty fields';
       return;
     }
     if(this.password === this.repeatPassword){
       const result = await this.service.register(this.username, this.password);
-      console.log(result);
       if(result.status){
         sessionStorage.setItem('user_token', result.token);
-        sessionStorage.setItem('username', this.username);
         this.setPassword('');
         this.setRepeatPassword('');
         return {success: true, err: null, token:result.token}
@@ -43,5 +39,12 @@ export default class RegisterStore{
       }
     }
     this.errorMessage = 'repeat password doesn\'t match';
+  }
+  setToken = async (e, send) =>{
+    e.preventDefault();
+    const result = await this.register(); 
+    if(result.token){
+      send(result.token);
+    }
   }
 }
