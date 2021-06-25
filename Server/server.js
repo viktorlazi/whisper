@@ -9,6 +9,8 @@ import {login_user} from './login.js';
 import User from './models/User.js';
 import {sendContacts, sendMessages} from './fetch.js';
 import Message from './models/Message.js';
+import JWT_SECRET from "./jwt_secret.js";
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const server = createServer(app);
@@ -38,6 +40,11 @@ let messages = [];
 
 socketio.on('connection', (socket)=>{
   console.log('new socket');
+  jwt.verify(socket.handshake.auth.token, JWT_SECRET, (err, obj)=>{
+    console.log(err);
+    console.log(obj);
+  });
+  /*
   socket.emit('contact list', ['viktor', 'filip']);
   const msg = [{
     content:'alo',
@@ -52,7 +59,7 @@ socketio.on('connection', (socket)=>{
     console.log(name);
     socket.emit('contact list', ['viktor', 'filip', 'branko']);
   });
-
+*/
 });
 
 /*

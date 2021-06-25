@@ -4,17 +4,17 @@ const webSocketAddress = 'http://127.0.0.1:4000';
 
 export default class SocketService{
   socket;
-  constructor(token){
-    this.initSocket(token);
+  constructor(){
+    this.initSocket();
   }
-  initSocket = (token) =>{
+  initSocket = () =>{
     setInterval(()=>{
       if(!this.socket && sessionStorage.getItem('token')){
         this.socket = io(
           webSocketAddress, 
           {
             auth: { 
-              token:token
+              token:sessionStorage.getItem('token')
             }
           }
           );

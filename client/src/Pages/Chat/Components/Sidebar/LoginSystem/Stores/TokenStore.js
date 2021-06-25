@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 
 export default class TokenStore{
-  token = '';
+  token = sessionStorage.getItem('token');
   constructor(){
     makeAutoObservable(this);
   }
