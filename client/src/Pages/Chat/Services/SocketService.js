@@ -9,16 +9,29 @@ export default class SocketService{
   }
   initSocket = () =>{
     setInterval(()=>{
-      if(!this.socket && sessionStorage.getItem('token')){
-        this.socket = io(
-          webSocketAddress, 
-          {
-            auth: { 
-              token:sessionStorage.getItem('token')
+      if(sessionStorage.getItem('token')){
+        if(this.socket){
+          if(!this.socket.connected){
+            this.socket = io(
+              webSocketAddress, 
+              {
+                auth: { 
+                  token:sessionStorage.getItem('token')
+                }
+              }
+              );
+            }
+          }else{
+            this.socket = io(
+              webSocketAddress, 
+              {
+                auth: { 
+                  token:sessionStorage.getItem('token')
+                }
+              }
+              );
             }
           }
-          );
-        }
-    }, 1000);
+        }, 1000);
   }
 }

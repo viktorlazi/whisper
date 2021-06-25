@@ -40,10 +40,14 @@ let messages = [];
 
 socketio.on('connection', (socket)=>{
   console.log('new socket');
-  jwt.verify(socket.handshake.auth.token, JWT_SECRET, (err, obj)=>{
-    console.log(err);
-    console.log(obj);
-  });
+  const auth = (jwt.verify(socket.handshake.auth.token, JWT_SECRET, (err, obj)=>{
+    return obj;
+  }));
+  const username = auth?auth.username:null;
+  if(!username){
+    console.log(username);
+    socket.emit('invalid token');
+  }
   /*
   socket.emit('contact list', ['viktor', 'filip']);
   const msg = [{
