@@ -28,6 +28,8 @@
   margin-top:0px;
   padding:5px;
   margin-bottom:0px;
+  height: 400px;
+  overflow-y: auto;
 }
 .sidebar_add_new > input{
   background-color:white;

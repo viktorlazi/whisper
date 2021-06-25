@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {action, makeAutoObservable} from 'mobx';
 import ContactStore from './ContactStore';
 
 export default class SidebarStore{
@@ -25,7 +25,9 @@ export default class SidebarStore{
     this.socketService.socket.on('contact list', (list)=>{
       this.contacts = [];
       list.forEach(e => {
-        this.contacts.push(new ContactStore(e));
+        action(()=>{
+          this.contacts.push(new ContactStore(e));
+        });
       });
     });
   }

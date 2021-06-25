@@ -1,6 +1,5 @@
 import {makeAutoObservable, runInAction} from 'mobx';
 import LoginService from '../Services/LoginService';
-import routes from '../../../../../../../webRoutes';
 
 export default class LoginStore{
   username = '';
@@ -17,7 +16,7 @@ export default class LoginStore{
   setPassword = (x) =>{
     this.password = x;
   }
-  login = async (e, getToken) =>{
+  login = async (e) =>{
     e.preventDefault();
     if(!this.username || !this.password){
       this.errorMessage = 'empty fields';
@@ -25,10 +24,10 @@ export default class LoginStore{
     }
     const result = await this.service.login(this.username, this.password);
     runInAction(()=>{
-      this.errorMessage = result.toString();
+      this.errorMessage = result.error;
     });
     this.setPassword('');
-    if(result.status){
+    if(result.token){
       console.log(result)
       sessionStorage.setItem('token', result.token);
       return {success: true, err: null}

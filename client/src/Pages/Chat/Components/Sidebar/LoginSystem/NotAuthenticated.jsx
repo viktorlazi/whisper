@@ -3,7 +3,7 @@ import {useState} from 'react';
 import Login from './Login/Login';
 import Register from './Register/Register';
 
-function NotAuthenticated({getToken}) {
+function NotAuthenticated({setToken}) {
   const [toggleSystem, setToggleSystem] = useState(false);
   return (
     <div className="no_auth">
@@ -13,8 +13,8 @@ function NotAuthenticated({getToken}) {
       </label>
       {
         toggleSystem?
-        <Register />
-        :<Login getToken={getToken} />
+        <Register setToken={setToken} />
+        :<Login setToken={setToken} />
       }
     </div>
   )

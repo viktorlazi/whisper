@@ -1,15 +1,19 @@
 import Authenticated from './Authenticated';
 import NotAuthenticated from './NotAuthenticated';
+import TokenStore from './Stores/TokenStore';
+import {observer} from 'mobx-react';
+
+const tokenStore = new TokenStore();
 
 function LoginSystem() {
   return (
     <div className="auth">
       {
-        sessionStorage.getItem('token')?
-        <Authenticated />
-        :<NotAuthenticated />
+        tokenStore.token?
+        <Authenticated clearToken={tokenStore.clearToken} />
+        :<NotAuthenticated setToken={tokenStore.setToken} />
       }
     </div>
   )
 }
-export default LoginSystem;
+export default observer(LoginSystem);

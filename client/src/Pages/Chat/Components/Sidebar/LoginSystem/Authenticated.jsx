@@ -1,8 +1,8 @@
-function Authenticated() {
+function Authenticated({clearToken}) {
   return (
     <div className="auth">
-      <p>logged in</p>
-      <button onClick={()=>{sessionStorage.clear()}}>log out</button>  
+      <p>Logged In</p>
+      <button onClick={()=>{clearToken()}}>Log Out</button>  
     </div>
   )
 }
