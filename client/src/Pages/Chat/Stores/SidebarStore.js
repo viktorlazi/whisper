@@ -22,7 +22,7 @@ export default class SidebarStore{
   }
   fetchNewContact = (e) =>{
     e.preventDefault();
-    if(this.newContact){
+    if(this.newContact && this.socketService.socket){
       this.socketService.socket.emit('fetch new contact', this.newContact);
     }
     this.newContact = '';

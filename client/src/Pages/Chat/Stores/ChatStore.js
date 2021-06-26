@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import SidebarStore from './SidebarStore';
 import BodyStore from './BodyStore';
 import SocketService from '../Services/SocketService';
@@ -37,19 +37,18 @@ export default class ChatStore{
   initListeners = () =>{
     if(this.socketService.socket.connected){
       this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
+      this.socketService.socket.emit('contact list');
       this.status = 'public key';
       
-      this.socketService.socket.on('contact approved', (c)=>{
-        this.contacts.push(new ContactStore(c.name));
-      });
       this.socketService.socket.on('contact list', (list)=>{
-        action(()=>{
+        runInAction(()=>{
           this.contacts = [];
         });
+        
         list.forEach(e => {
-          action(()=>{
+          runInAction(()=>{
             this.contacts.push(new ContactStore(e));
-        });
+          });
       });
     });
   }

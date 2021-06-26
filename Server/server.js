@@ -54,15 +54,18 @@ socketio.on('connection', async (socket)=>{
       console.log(pk);
       clientConnections.push({username, id: socket, publicKey:pk});
     });
+    socket.on('contact list', ()=>{
+      socket.emit('contact list', client.contacts.map(e=>e.name));
+    });
     socket.on('fetch new contact', async (new_contact) => {
       const details = await User.findOne({'username':new_contact})
       if(details){
         if(!client.contacts.find(e=>e.name===new_contact)){
           User.updateOne({_id:client._id}, {
-            contacts:[...client.contacts, {name:details.username}]
+            contacts:[...client.contacts.map(e=>e.name), details.username]
           }).exec()
         }
-        socket.emit('contact approved', {name:details.username})
+        socket.emit('contact list', [...client.contacts.map(e=>e.name), details.username])
       }
       else{
         socket.emit('contact nonexistent')
