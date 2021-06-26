@@ -38,10 +38,10 @@ export default class ChatStore{
     if(this.socketService.socket.connected){
       this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
       this.socketService.socket.emit('contact list');
-      this.status = 'public key';
       
       this.socketService.socket.on('contact list', (list)=>{
         runInAction(()=>{
+          this.status = 'contacts fetched';
           this.contacts = [];
         });
         
