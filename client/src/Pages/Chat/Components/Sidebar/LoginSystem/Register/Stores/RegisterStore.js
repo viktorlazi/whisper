@@ -43,7 +43,7 @@ export default class RegisterStore{
   setToken = async (e, send) =>{
     e.preventDefault();
     const result = await this.register(); 
-    if(result.token){
+    if(result){
       send(result.token);
     }
   }
