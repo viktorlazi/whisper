@@ -15,6 +15,7 @@ export default class ChatStore{
   constructor(){
     makeAutoObservable(this);
     this.initialInterval();
+    this.connectionInterval();
   }
   initialInterval = () =>{
     const interval = setInterval(()=>{
@@ -27,6 +28,15 @@ export default class ChatStore{
       }
     }, 500);
   }
+  connectionInterval = () =>{
+    const interval = setInterval(()=>{
+      if(!sessionStorage.getItem('token') && this.socketService.socket){
+        this.socketService.socket.disconnect();
+        clearInterval(interval);
+      }
+    }, 1000);
+    
+  }
   getContacts = () =>{
     return this.contacts;
   }
@@ -38,6 +48,11 @@ export default class ChatStore{
     if(this.socketService.socket.connected){
       this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
       this.socketService.socket.emit('contact list');
+      this.socketService.socket.on('disconnect', ()=>{
+        runInAction(()=>{
+          this.contacts = [];
+        });
+      });
       
       this.socketService.socket.on('contact list', (list)=>{
         runInAction(()=>{
