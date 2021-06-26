@@ -38,15 +38,21 @@ try{
 let clientConnections = [];
 let messages = [];
 
-socketio.on('connection', (socket)=>{
-  console.log('new socket');
-  const auth = (jwt.verify(socket.handshake.auth.token, JWT_SECRET, (err, obj)=>{
+const getUsername = (token) =>{
+  const auth = (jwt.verify(token, JWT_SECRET, (err, obj)=>{
     return obj;
   }));
   const username = auth?auth.username:null;
-  if(!username){
-    console.log(username);
-    socket.emit('invalid token');
+  return username;
+}
+
+socketio.on('connection', (socket)=>{
+  const username = getUsername(socket.handshake.auth.token);
+  if(username){
+    socket.on('my public key', (pk)=>{
+      console.log(pk);
+      clientConnections.push({username, id: socket, publicKey:pk});
+    })
   }
   /*
   socket.emit('contact list', ['viktor', 'filip']);
