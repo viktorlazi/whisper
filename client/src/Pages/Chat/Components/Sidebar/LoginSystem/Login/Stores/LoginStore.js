@@ -26,8 +26,10 @@ export default class LoginStore{
       this.errorMessage = result.error;
     });
     this.setPassword('');
-    if(result.token){
-      return {success: true, err: null, token:result.token}
+    if(result){
+      if(result.token){
+        return {success: true, err: null, token:result.token}
+      }
     }else{
       return {success: false, err: result.error}
     }
@@ -35,7 +37,7 @@ export default class LoginStore{
   setToken = async (e, send) =>{
     e.preventDefault();
     const result = await this.login(); 
-    if(result.token){
+    if(result){
       send(result.token);
     }
   }
