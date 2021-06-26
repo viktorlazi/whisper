@@ -22,7 +22,7 @@ function Sidebar({store}) {
       </div>
       <div className="sidebar_chats">
         {
-          store.contacts.map(
+          store.getContacts().map(
             (contact) =>{
               return (
                 <Contact 

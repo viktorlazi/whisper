@@ -46,13 +46,28 @@ const getUsername = (token) =>{
   return username;
 }
 
-socketio.on('connection', (socket)=>{
+socketio.on('connection', async (socket)=>{
   const username = getUsername(socket.handshake.auth.token);
   if(username){
+    const client = await User.findOne({'username':username});
     socket.on('my public key', (pk)=>{
       console.log(pk);
       clientConnections.push({username, id: socket, publicKey:pk});
-    })
+    });
+    socket.on('fetch new contact', async (new_contact) => {
+      const details = await User.findOne({'username':new_contact})
+      if(details){
+        if(!client.contacts.find(e=>e.name===new_contact)){
+          User.updateOne({_id:client._id}, {
+            contacts:[...client.contacts, {name:details.username}]
+          }).exec()
+        }
+        socket.emit('contact approved', {name:details.username})
+      }
+      else{
+        socket.emit('contact nonexistent')
+      }
+    });
   }
   /*
   socket.emit('contact list', ['viktor', 'filip']);

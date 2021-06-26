@@ -1,8 +1,8 @@
-import {makeAutoObservable, autorun} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import SidebarStore from './SidebarStore';
 import BodyStore from './BodyStore';
 import SocketService from '../Services/SocketService';
-import CryptoStore from './CryptoStore';
+import ContactStore from './ContactStore';
 
 export default class ChatStore{
   contacts = [];
@@ -10,22 +10,25 @@ export default class ChatStore{
   status = 'initial';
   socketService = new SocketService();
   bodyStore = new BodyStore(null, this.socketService);
-  sidebarStore = new SidebarStore(cont => this.changeChat(cont), this.socketService);  
-  cryptoStore = new CryptoStore();
+  sidebarStore = new SidebarStore(cont => this.changeChat(cont),()=>{return this.getContacts()}, this.socketService);  
 
   constructor(){
     makeAutoObservable(this);
-    const initialInterval = setInterval(()=>{
-      console.log('initial interval');
+    this.initialInterval();
+  }
+  initialInterval = () =>{
+    const interval = setInterval(()=>{
       if(this.status !== 'initial'){
-        clearInterval(initialInterval);
+        clearInterval(interval);
         return;
       }
       if(this.socketService.socket){
         this.initListeners();
       }
     }, 500);
-
+  }
+  getContacts = () =>{
+    return this.contacts;
   }
   changeChat = (contact) =>{
     this.bodyStore = null;
@@ -33,8 +36,22 @@ export default class ChatStore{
   }
   initListeners = () =>{
     if(this.socketService.socket.connected){
-      this.socketService.socket.emit('my public key', this.cryptoStore.publicKey);
+      this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
       this.status = 'public key';
-    }
+      
+      this.socketService.socket.on('contact approved', (c)=>{
+        this.contacts.push(new ContactStore(c.name));
+      });
+      this.socketService.socket.on('contact list', (list)=>{
+        action(()=>{
+          this.contacts = [];
+        });
+        list.forEach(e => {
+          action(()=>{
+            this.contacts.push(new ContactStore(e));
+        });
+      });
+    });
+  }
   }
 }

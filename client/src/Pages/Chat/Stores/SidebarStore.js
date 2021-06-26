@@ -1,18 +1,17 @@
 import {action, makeAutoObservable} from 'mobx';
-import ContactStore from './ContactStore';
 
 export default class SidebarStore{
-  contacts = [];
   socketService;
   active = null;
   newContact = '';
   changeChat;
+  getContacts;
   
-  constructor(changeChat, socketService){
+  constructor(changeChat, getContacts, socketService){
     makeAutoObservable(this);
+    this.getContacts = getContacts;
     this.socketService = socketService;
     this.changeChat = changeChat;
-    this.initContactListListener();
   }
   toggleActive = (contact) =>{
     this.active = contact;
@@ -20,20 +19,6 @@ export default class SidebarStore{
   }
   setNewContact = (x) =>{
     this.newContact = x;
-  }
-  initContactListListener = () =>{
-    if(this.socketService.socket){
-      this.socketService.socket.on('contact list', (list)=>{
-        action(()=>{
-          this.contacts = [];
-        });
-        list.forEach(e => {
-          action(()=>{
-            this.contacts.push(new ContactStore(e));
-        });
-      });
-    });
-  }
   }
   fetchNewContact = (e) =>{
     e.preventDefault();
