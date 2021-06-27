@@ -39,6 +39,7 @@ function Sidebar({store}) {
         <input type="text" value={store.newContact} onChange={e=>store.setNewContact(e.target.value)} placeholder="type a name and press enter"></input>
         <p id="add_contact_error_message">{}</p>
         <button onClick={store.fetchNewContact} id="addContact" type="submit"></button>
+        <p className="errorMessage">{store.getErrorMsg()}</p>
       </form>
       <LoginSystem />
     </div>

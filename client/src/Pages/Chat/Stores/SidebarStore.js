@@ -6,12 +6,14 @@ export default class SidebarStore{
   newContact = '';
   changeChat;
   getContacts;
+  getErrorMsg;
   
-  constructor(changeChat, getContacts, socketService){
+  constructor(changeChat, getContacts, socketService, getErrorMsg){
     makeAutoObservable(this);
     this.getContacts = getContacts;
     this.socketService = socketService;
     this.changeChat = changeChat;
+    this.getErrorMsg = getErrorMsg;
   }
   toggleActive = (contact) =>{
     this.active = contact;

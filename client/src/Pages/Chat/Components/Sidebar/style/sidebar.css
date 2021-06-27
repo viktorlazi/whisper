@@ -46,6 +46,9 @@
   display:block;
 
 }
+.errorMessage{
+  color: red;
+}
 #logout{
   padding:10px;
   margin-left:5px;
