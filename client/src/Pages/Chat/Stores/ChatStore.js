@@ -1,4 +1,4 @@
-import {action, makeAutoObservable, runInAction} from 'mobx';
+import {makeAutoObservable, runInAction, toJS} from 'mobx';
 import SidebarStore from './SidebarStore';
 import BodyStore from './BodyStore';
 import SocketService from '../Services/SocketService';
@@ -10,12 +10,15 @@ export default class ChatStore{
   sts = 'initial';
   contactErr = '';
   socketService = new SocketService();
-  bodyStore = new BodyStore(null, this.socketService);
+  bodyStore = new BodyStore(null, this.socketService, this.getMessages);
   sidebarStore = new SidebarStore(cont => this.changeChat(cont),()=>{return this.getContacts()}, this.socketService, ()=>{return this.getContactErrMsg()});  
 
   constructor(){
     makeAutoObservable(this);
     this.connectionInterval();
+  }
+  getMessages = () =>{
+    return this.messages;
   }
   getContactErrMsg = () =>{
     return this.contactErr;
@@ -40,7 +43,7 @@ export default class ChatStore{
   }
   changeChat = (contact) =>{
     this.bodyStore = null;
-    this.bodyStore = new BodyStore(contact, this.socketService);
+    this.bodyStore = new BodyStore(contact, this.socketService, this.getMessages);
   }
   initListeners = () =>{
     if(this.socketService.socket.connected){
@@ -53,6 +56,12 @@ export default class ChatStore{
       this.socketService.socket.on('disconnect', ()=>{
         runInAction(()=>{
           this.contacts = [];
+        });
+      });
+      this.socketService.socket.on('incoming message', (msg)=>{
+        runInAction(()=>{
+          this.messages.push(msg);
+          console.log(toJS(this.messages));
         });
       });
       this.socketService.socket.on('contact nonexistent', ()=>{

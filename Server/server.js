@@ -46,15 +46,21 @@ const getUsername = (token) =>{
   return username;
 }
 try{
-
   socketio.on('connection', async (socket)=>{
     const username = getUsername(socket.handshake.auth.token);
     if(username){
       const client = await User.findOne({'username':username});
+      // connections
       socket.on('my public key', (pk)=>{
         console.log(pk);
         clientConnections.push({username, id: socket, publicKey:pk});
       });
+      socket.on('disconnect', ()=>{
+        clientConnections = clientConnections.filter(e=>{
+          return e.username!==client.username
+        });
+      }); 
+      // contacts
       socket.on('contact list', ()=>{
         socket.emit('contact list', client.contacts);
       });
@@ -76,6 +82,21 @@ try{
           socket.emit('contact nonexistent')
         }
       });
+      // messages
+      socket.on('new message', (msg, to, timestamp)=>{
+        const receiverSocket = clientConnections.find(e=>e.username===to);
+        if(receiverSocket){
+          receiverSocket.id.emit('incoming message', {content:msg, sender:client.username, timestamp:timestamp})
+        }else{
+          if(messages){
+            messages = [...messages, {msg:msg, from: client.username, to:to, timestamp:timestamp}]
+          }else{
+            messages = [{msg:msg, from: client.username, to:to, timestamp:timestamp}]
+          }
+        }
+        console.log(messages);
+      })
+      
     }
   });
 }catch{

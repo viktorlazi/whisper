@@ -26,7 +26,7 @@ function Body({store}) {
         </div>
         <div className="chat_meat">
           {
-            store.messages.map(
+            store.getMessages().map(
               (msg) =>{
                 return <Message 
                   message={msg.content}
@@ -40,8 +40,8 @@ function Body({store}) {
         
         <div className="chat_footer">
           <form>
-            <input placeholder="Type a message" type="text" />
-            <button>Send a message</button>
+            <input placeholder="Type a message" type="text" value={store.newMessage} onChange={(e)=>{store.setNewMessage(e.target.value)}} />
+            <button type="submit" onClick={(e)=>{store.sendMessage(e)}}>Send a message</button>
           </form>
         </div>
       </div>
