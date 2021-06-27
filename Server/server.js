@@ -45,51 +45,42 @@ const getUsername = (token) =>{
   const username = auth?auth.username:null;
   return username;
 }
+try{
 
-socketio.on('connection', async (socket)=>{
-  const username = getUsername(socket.handshake.auth.token);
-  if(username){
-    const client = await User.findOne({'username':username});
-    socket.on('my public key', (pk)=>{
-      console.log(pk);
-      clientConnections.push({username, id: socket, publicKey:pk});
-    });
-    socket.on('contact list', ()=>{
-      socket.emit('contact list', client.contacts.map(e=>e.name));
-    });
-    socket.on('fetch new contact', async (new_contact) => {
-      const details = await User.findOne({'username':new_contact})
-      if(details){
-        if(!client.contacts.find(e=>e.name===new_contact)){
-          User.updateOne({_id:client._id}, {
-            contacts:[...client.contacts.map(e=>e.name), details.username]
-          }).exec()
+  socketio.on('connection', async (socket)=>{
+    const username = getUsername(socket.handshake.auth.token);
+    if(username){
+      const client = await User.findOne({'username':username});
+      socket.on('my public key', (pk)=>{
+        console.log(pk);
+        clientConnections.push({username, id: socket, publicKey:pk});
+      });
+      socket.on('contact list', ()=>{
+        socket.emit('contact list', client.contacts);
+      });
+      socket.on('fetch new contact', async (new_contact) => {
+        const details = await User.findOne({'username':new_contact});
+        console.log(details);
+        if(details){
+          if(!client.contacts.find(e=>{return e===new_contact})){
+            User.updateOne({username: username}, {
+              contacts:[...client.contacts, details.username]
+            }).exec();
+            client.contacts.push(details.username);
+            socket.emit('contact list', [...client.contacts]);
+            return;
+          }
+          socket.emit('contact list', [...client.contacts]);
         }
-        socket.emit('contact list', [...client.contacts.map(e=>e.name), details.username])
-      }
-      else{
-        socket.emit('contact nonexistent')
-      }
-    });
-  }
-  /*
-  socket.emit('contact list', ['viktor', 'filip']);
-  const msg = [{
-    content:'alo',
-    timestamp:'danas',
-    sender:'viktor'
-  }];
-  socket.on('messages', ()=>{
-    console.log('me')
-    socket.emit('messages', msg);
+        else{
+          socket.emit('contact nonexistent')
+        }
+      });
+    }
   });
-  socket.on('fetch new contact', (name)=>{
-    console.log(name);
-    socket.emit('contact list', ['viktor', 'filip', 'branko']);
-  });
-*/
-});
+}catch{
 
+}
 /*
 socketio.on('connection', async (socket) => {
   console.log('conn');
