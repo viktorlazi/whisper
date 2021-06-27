@@ -14,25 +14,18 @@ export default class ChatStore{
 
   constructor(){
     makeAutoObservable(this);
-    this.initialInterval();
     this.connectionInterval();
-  }
-  initialInterval = () =>{
-    const interval = setInterval(()=>{
-      if(this.status !== 'initial'){
-        clearInterval(interval);
-        return;
-      }
-      if(this.socketService.socket){
-        this.initListeners();
-      }
-    }, 500);
   }
   connectionInterval = () =>{
     const interval = setInterval(()=>{
+      if(this.status = 'initial'){
+        this.initListeners();
+      }
       if(!sessionStorage.getItem('token') && this.socketService.socket){
         this.socketService.socket.disconnect();
-        clearInterval(interval);
+        runInAction(()=>{
+          this.status = 'initial';
+        });
       }
     }, 1000);
     
