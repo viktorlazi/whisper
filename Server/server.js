@@ -7,8 +7,6 @@ import mongoose from 'mongoose';
 import {add_user} from './register.js';
 import {login_user} from './login.js';
 import User from './models/User.js';
-import {sendContacts, sendMessages} from './fetch.js';
-import Message from './models/Message.js';
 import JWT_SECRET from "./jwt_secret.js";
 import jwt from 'jsonwebtoken';
 
@@ -36,7 +34,6 @@ try{
 }
 
 let clientConnections = [];
-let messages = [];
 
 const getUsername = (token) =>{
   const auth = (jwt.verify(token, JWT_SECRET, (err, obj)=>{
@@ -50,6 +47,7 @@ try{
     const username = getUsername(socket.handshake.auth.token);
     if(username){
       const client = await User.findOne({'username':username});
+      console.log(client);
       // connections
       socket.on('my public key', (pk)=>{
         console.log(pk);
@@ -82,19 +80,25 @@ try{
           socket.emit('contact nonexistent')
         }
       });
+      socket.on('who is online', ()=>{
+        let online = [];
+        client.contacts.forEach(c => {
+          if(clientConnections.map(e=>e.username).includes(c)){
+            online.push(c);
+          }
+        });
+        socket.emit('online is', online);
+      });
       // messages
       socket.on('new message', (msg, to, timestamp)=>{
         const receiverSocket = clientConnections.find(e=>e.username===to);
         if(receiverSocket){
           receiverSocket.id.emit('incoming message', {content:msg, sender:client.username, timestamp:timestamp})
+          socket.emit('msg sent', to);
         }else{
-          if(messages){
-            messages = [...messages, {msg:msg, from: client.username, to:to, timestamp:timestamp}]
-          }else{
-            messages = [{msg:msg, from: client.username, to:to, timestamp:timestamp}]
-          }
+          console.log('not online: ' + to);
+          socket.emit('msg not sent', to);
         }
-        console.log(messages);
       })
       
     }

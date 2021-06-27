@@ -30,6 +30,7 @@ function Sidebar({store}) {
                   activate={()=>store.toggleActive(contact.name)}
                   active={contact.name === store.active}
                   key={Math.random()}
+                  online={contact.online}
                 />
               )
           })

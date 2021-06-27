@@ -16,12 +16,20 @@ export default class ChatStore{
   constructor(){
     makeAutoObservable(this);
     this.connectionInterval();
+    this.updateInterval();
   }
   getMessages = () =>{
     return this.messages;
   }
   getContactErrMsg = () =>{
     return this.contactErr;
+  }
+  updateInterval = () =>{
+    const interval = setInterval(()=>{
+      if(this.socketService.socket){
+        this.socketService.socket.emit('who is online');
+      }
+    }, 2000);
   }
   connectionInterval = () =>{
     console.log(this.sts);
@@ -32,6 +40,7 @@ export default class ChatStore{
       if(!sessionStorage.getItem('token') && this.socketService.socket){
         this.socketService.socket.disconnect();
         runInAction(()=>{
+          this.bodyStore = new BodyStore(null, this.socketService, this.getMessages);
           this.sts = 'initial';
         });
       }
@@ -56,6 +65,17 @@ export default class ChatStore{
       this.socketService.socket.on('disconnect', ()=>{
         runInAction(()=>{
           this.contacts = [];
+        });
+      });
+      this.socketService.socket.on('online is', (online)=>{
+        runInAction(()=>{
+          this.contacts.forEach(e => {
+            if(online.includes(e.name)){
+              this.contacts[this.contacts.indexOf(e)].online = true;
+            }else{
+              this.contacts[this.contacts.indexOf(e)].online = false;
+            }
+          });
         });
       });
       this.socketService.socket.on('incoming message', (msg)=>{
