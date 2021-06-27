@@ -77,7 +77,7 @@ try{
           socket.emit('contact list', [...client.contacts]);
         }
         else{
-          socket.emit('contact nonexistent')
+          socket.emit('contact nonexistent');
         }
       });
       socket.on('who is online', ()=>{
