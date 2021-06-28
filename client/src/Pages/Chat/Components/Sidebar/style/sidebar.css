@@ -28,8 +28,9 @@
   margin-top:0px;
   padding:5px;
   margin-bottom:0px;
-  height: 400px;
-  overflow-y: auto;
+  height: 100px;
+  overflow:hidden;
+  
 }
 .sidebar_add_new > input{
   background-color:white;
@@ -57,4 +58,5 @@
 #add_contact_error_message{
   color:red;
   font-size:12px;
+  overflow:hidden;
 }

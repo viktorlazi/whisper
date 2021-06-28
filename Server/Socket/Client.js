@@ -1,27 +1,55 @@
-import User from './models/User.js';
+import User from '../models/User.js';
+import JWT_SECRET from "../jwt_secret.js";
+import jwt from 'jsonwebtoken';
 
 export default class Client{
   username;
   socket;
   publicKey;
-  contacts;
+  contacts;a
   constructor(socket){
     this.username = this.getUsernameFromJWT(socket.handshake.auth.token);
     this.socket = socket;
-    this.publicKey = publicKey;
     this.getContactsAsync();
-    this.initPublicKeyListener();
+    this.initListeners();
+    this.initRequests();
   }
   getContactsAsync = async () =>{
-    const client = await User.findOne({'username':username});
+    const client = await User.findOne({'username':this.username});
     if(client){
-      runInAction(()=>{
-        this.contacts = client.contacts;
-      });
+      this.contacts = client.contacts;
+      return client.contacts;
     }
+    return [];
   }
-  initPublicKeyListener = () =>{
-    socket.on('my public key', (pk)=>{
+  getContacts = () =>{
+    return this.contacts;
+  }
+  initRequests = () =>{
+    this.socket.emit('public key request');
+  }
+  initListeners = () =>{
+    this.socket.on('contact list', async () =>{
+      this.socket.emit('contact list', await this.getContactsAsync());
+    });
+    this.socket.on('fetch new contact', async (newContactUsername) => {
+      const newContact = await User.findOne({'username':newContactUsername});
+      if(newContact){
+        const contacts = await this.getContactsAsync();
+        if(!contacts.includes(newContactUsername)){
+          User.updateOne({username: this.username}, {
+            contacts:[...this.contacts, newContactUsername]
+          }).exec();
+          this.contacts.push(newContactUsername);
+          this.socket.emit('contact list', [...this.contacts]);
+          return;
+        }
+        this.socket.emit('contact list', [...this.contacts]);
+        return;
+      }
+      this.socket.emit('contact nonexistent');
+    });
+    this.socket.on('my public key', (pk)=>{
       this.publicKey = pk;
     });
   }

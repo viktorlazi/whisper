@@ -6,11 +6,7 @@ import mongo_pass from './mongo_pass.js';
 import mongoose from 'mongoose';
 import {add_user} from './register.js';
 import {login_user} from './login.js';
-import User from './models/User.js';
-import JWT_SECRET from "./jwt_secret.js";
-import jwt from 'jsonwebtoken';
-import Client from './Socket/Client.js';   
-import ClientList from './Socket/ClientList.js';
+import Connections from './Socket/Connections.js';
 
 const app = express();
 const server = createServer(app);
@@ -25,8 +21,7 @@ try{
     useCreateIndex: true,
     useNewUrlParser:true,
     useUnifiedTopology:true
-  });
-  
+  });  
   const db = mongoose.connection; 
   db.once('open', ()=>{
     console.log('db ok');
@@ -35,10 +30,10 @@ try{
   console.log(e)
 }
 
-let clientConnections = new ClientList();
+let connections = new Connections();
 
 socketio.on('connection', async (socket)=>{
-  clientConnections.append(new Client(socket));
+  connections.append(socket);
 });
 
 /*
