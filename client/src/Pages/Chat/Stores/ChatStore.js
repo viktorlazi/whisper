@@ -3,14 +3,16 @@ import SidebarStore from './SidebarStore';
 import BodyStore from './BodyStore';
 import SocketService from '../Services/SocketService';
 import ContactStore from './ContactStore';
+import CryptoStore from './CryptoStore';
 
 export default class ChatStore{
   contacts = [];
   messages = [];
   sts = 'initial';
   contactErr = '';
+  cryptoStore = new CryptoStore();
   socketService = new SocketService();
-  bodyStore = new BodyStore(null, this.socketService, this.getMessages, (x)=>this.appendMessage(x));
+  bodyStore = new BodyStore(null, null, this.socketService, this.getMessages, (x)=>this.appendMessage(x));
   sidebarStore = new SidebarStore(cont => this.changeChat(cont),()=>{return this.getContacts()}, this.socketService, ()=>{return this.getContactErrMsg()});  
 
   constructor(){
@@ -23,6 +25,9 @@ export default class ChatStore{
   }
   getMessages = () =>{
     return this.messages;
+  }
+  getSharedSecret = (username) =>{
+    return this.contacts.find(e=>e.name === username).sharedSecret;
   }
   getContactErrMsg = () =>{
     return this.contactErr;
@@ -43,7 +48,7 @@ export default class ChatStore{
       if(!sessionStorage.getItem('token') && this.socketService.socket){
         this.socketService.socket.disconnect();
         runInAction(()=>{
-          this.bodyStore = new BodyStore(null, this.socketService, this.getMessages, x=>this.appendMessage(x));
+          this.bodyStore = new BodyStore(null, null, this.socketService, this.getMessages, x=>this.appendMessage(x));
           this.sts = 'initial';
         });
       }
@@ -54,8 +59,7 @@ export default class ChatStore{
     return this.contacts;
   }
   changeChat = (contact) =>{
-    this.bodyStore = null;
-    this.bodyStore = new BodyStore(contact, this.socketService, this.getMessages, x=>this.appendMessage(x));
+    this.bodyStore = new BodyStore(contact, ()=>this.getSharedSecret(contact), this.socketService, this.getMessages, x=>this.appendMessage(x));
   }
   initListeners = () =>{
     if(this.socketService.socket.connected){
@@ -65,7 +69,7 @@ export default class ChatStore{
       console.log('init listeners');
       this.socketService.socket.emit('contact list');
       this.socketService.socket.on('public key request', ()=>{
-        this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
+        this.socketService.socket.emit('my public key', this.cryptoStore.publicKey);
       });
       this.socketService.socket.on('disconnect', ()=>{
         runInAction(()=>{
@@ -78,8 +82,8 @@ export default class ChatStore{
             const onlineContact = online.find(i=>i.username === e.name);
             this.contacts[this.contacts.indexOf(e)].online 
             = onlineContact? true:false;
-            this.contacts[this.contacts.indexOf(e)].publicKey
-            = onlineContact?onlineContact.publicKey:null;
+            this.contacts[this.contacts.indexOf(e)].sharedSecret
+            = onlineContact?this.cryptoStore.getSharedSecret(onlineContact.publicKey):null;
           });
         });
       });

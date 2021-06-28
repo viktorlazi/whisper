@@ -25,4 +25,11 @@ export default class CryptoStore{
     const pubKey = generator.modPow(_prKey, prime);
     this.publicKey = pubKey;
   }
+  getSharedSecret = (bobsPublicKey) =>{
+    const prKey = bigInt(this.prKey);
+    const bpk = bigInt(bobsPublicKey);
+    const prime = bigInt('0x' + bigPrime);
+    const secret = bpk.modPow(prKey, prime)
+    return secret;
+  }
 }

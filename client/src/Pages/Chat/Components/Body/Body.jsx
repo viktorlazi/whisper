@@ -30,7 +30,7 @@ function Body({store}) {
               (msg) =>{
                 if(msg.to === store.name || msg.sender === store.name){
                   return <Message 
-                    message={msg.content}
+                    message={store.decryptMessage(msg.content)}
                     timestamp={msg.timestamp}
                     isGreen={(msg.to === store.name)}
                   />
