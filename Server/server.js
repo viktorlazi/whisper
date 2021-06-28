@@ -47,7 +47,6 @@ try{
     const username = getUsername(socket.handshake.auth.token);
     if(username){
       const client = await User.findOne({'username':username});
-      console.log(client);
       // connections
       socket.on('my public key', (pk)=>{
         console.log(pk);
@@ -64,7 +63,6 @@ try{
       });
       socket.on('fetch new contact', async (new_contact) => {
         const details = await User.findOne({'username':new_contact});
-        console.log(details);
         if(details){
           if(!client.contacts.find(e=>{return e===new_contact})){
             User.updateOne({username: username}, {

@@ -10,13 +10,16 @@ export default class ChatStore{
   sts = 'initial';
   contactErr = '';
   socketService = new SocketService();
-  bodyStore = new BodyStore(null, this.socketService, this.getMessages);
+  bodyStore = new BodyStore(null, this.socketService, this.getMessages, (x)=>this.appendMessage(x));
   sidebarStore = new SidebarStore(cont => this.changeChat(cont),()=>{return this.getContacts()}, this.socketService, ()=>{return this.getContactErrMsg()});  
 
   constructor(){
     makeAutoObservable(this);
     this.connectionInterval();
     this.updateInterval();
+  }
+  appendMessage = (msg) =>{
+    this.messages.push(msg);
   }
   getMessages = () =>{
     return this.messages;
@@ -40,7 +43,7 @@ export default class ChatStore{
       if(!sessionStorage.getItem('token') && this.socketService.socket){
         this.socketService.socket.disconnect();
         runInAction(()=>{
-          this.bodyStore = new BodyStore(null, this.socketService, this.getMessages);
+          this.bodyStore = new BodyStore(null, this.socketService, this.getMessages, x=>this.appendMessage(x));
           this.sts = 'initial';
         });
       }
@@ -52,7 +55,7 @@ export default class ChatStore{
   }
   changeChat = (contact) =>{
     this.bodyStore = null;
-    this.bodyStore = new BodyStore(contact, this.socketService, this.getMessages);
+    this.bodyStore = new BodyStore(contact, this.socketService, this.getMessages, x=>this.appendMessage(x));
   }
   initListeners = () =>{
     if(this.socketService.socket.connected){

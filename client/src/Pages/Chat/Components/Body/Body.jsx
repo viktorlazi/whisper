@@ -28,11 +28,13 @@ function Body({store}) {
           {
             store.getMessages().map(
               (msg) =>{
-                return <Message 
-                  message={msg.content}
-                  timestamp={msg.timestamp}
-                  isGreen={msg.sender !== store.name}
-                />
+                if(msg.to === store.name || msg.sender === store.name){
+                  return <Message 
+                    message={msg.content}
+                    timestamp={msg.timestamp}
+                    isGreen={(msg.to === store.name)}
+                  />
+                }
               }
             )
           }
