@@ -9,3 +9,6 @@
 .no_chat .text{
   color:rgb(168, 168, 168);
 }
+.no_chat a{
+  text-decoration: none;
+}
