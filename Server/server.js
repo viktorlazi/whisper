@@ -9,6 +9,8 @@ import {login_user} from './login.js';
 import User from './models/User.js';
 import JWT_SECRET from "./jwt_secret.js";
 import jwt from 'jsonwebtoken';
+import Client from './Socket/Client.js';   
+import ClientList from './Socket/ClientList.js';
 
 const app = express();
 const server = createServer(app);
@@ -33,18 +35,16 @@ try{
   console.log(e)
 }
 
-let clientConnections = [];
+let clientConnections = new ClientList();
 
-const getUsername = (token) =>{
-  const auth = (jwt.verify(token, JWT_SECRET, (err, obj)=>{
-    return obj;
-  }));
-  const username = auth?auth.username:null;
-  return username;
-}
+socketio.on('connection', async (socket)=>{
+  clientConnections.append(new Client(socket));
+});
+
+/*
 try{
   socketio.on('connection', async (socket)=>{
-    const username = getUsername(socket.handshake.auth.token);
+    const username = getUsernameFromJWT(socket.handshake.auth.token);
     if(username){
       let client = await User.findOne({'username':username});
       // connections
