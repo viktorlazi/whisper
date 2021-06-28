@@ -63,8 +63,10 @@ export default class ChatStore{
         this.sts = 'initialised';
       });
       console.log('init listeners');
-      this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
       this.socketService.socket.emit('contact list');
+      this.socketService.socket.on('public key request', ()=>{
+        this.socketService.socket.emit('my public key', this.socketService.cryptoStore.publicKey);
+      });
       this.socketService.socket.on('disconnect', ()=>{
         runInAction(()=>{
           this.contacts = [];
@@ -87,6 +89,14 @@ export default class ChatStore{
           console.log(toJS(this.messages));
         });
       });
+      this.socketService.socket.on('self contact', ()=>{
+        this.contactErr = 'you cant contact yourself';
+        setTimeout(()=>{
+          runInAction(()=>{
+            this.contactErr = '';
+          });
+        },1000);
+      });
       this.socketService.socket.on('contact nonexistent', ()=>{
         runInAction(()=>{
           this.contactErr = 'contact nonexistent';
@@ -101,8 +111,7 @@ export default class ChatStore{
         runInAction(()=>{
           this.sts = 'contacts fetched';
           this.contacts = [];
-        });
-        
+        });        
         list.forEach(e => {
           runInAction(()=>{
             this.contacts.push(new ContactStore(e));

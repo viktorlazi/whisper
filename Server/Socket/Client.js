@@ -12,7 +12,6 @@ export default class Client{
     this.socket = socket;
     this.getContactsAsync();
     this.initListeners();
-    this.initRequests();
   }
   getContactsAsync = async () =>{
     const client = await User.findOne({'username':this.username});
@@ -25,15 +24,17 @@ export default class Client{
   getContacts = () =>{
     return this.contacts;
   }
-  initRequests = () =>{
-    this.socket.emit('public key request');
-  }
   initListeners = () =>{
     this.socket.on('contact list', async () =>{
       this.socket.emit('contact list', await this.getContactsAsync());
+      this.socket.emit('public key request');
     });
     this.socket.on('fetch new contact', async (newContactUsername) => {
       const newContact = await User.findOne({'username':newContactUsername});
+      if(newContactUsername === this.username){
+        this.socket.emit('self contact');
+        return;
+      }
       if(newContact){
         const contacts = await this.getContactsAsync();
         if(!contacts.includes(newContactUsername)){
@@ -50,6 +51,7 @@ export default class Client{
       this.socket.emit('contact nonexistent');
     });
     this.socket.on('my public key', (pk)=>{
+      console.log(pk);
       this.publicKey = pk;
     });
   }

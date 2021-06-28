@@ -15,8 +15,8 @@ app.use(express.json());
 const socketio = new io.Server(server);
 
 //mongo
+const connection_url = "mongodb+srv://admin:" + mongo_pass + "@cluster0.lkgyy.mongodb.net/whisper?retryWrites=true&w=majority";
 try{
-  const connection_url = "mongodb+srv://admin:" + mongo_pass + "@cluster0.lkgyy.mongodb.net/whisper?retryWrites=true&w=majority";
   mongoose.connect(connection_url, {
     useCreateIndex: true,
     useNewUrlParser:true,
@@ -32,84 +32,14 @@ try{
 
 let connections = new Connections();
 
-socketio.on('connection', async (socket)=>{
-  connections.append(socket);
-});
-
-/*
 try{
   socketio.on('connection', async (socket)=>{
-    const username = getUsernameFromJWT(socket.handshake.auth.token);
-    if(username){
-      let client = await User.findOne({'username':username});
-      // connections
-      socket.on('my public key', (pk)=>{
-        console.log(pk);
-        clientConnections.push({username, id: socket, publicKey:pk});
-      });
-      socket.on('disconnect', ()=>{
-        clientConnections = clientConnections.filter(e=>{
-          return e.username!==client.username
-        });
-      }); 
-      // contacts
-      socket.on('contact list', ()=>{
-        socket.emit('contact list', client.contacts);
-      });
-      socket.on('fetch new contact', async (new_contact) => {
-        const details = await User.findOne({'username':new_contact});
-        if(details){
-          if(!client.contacts.find(e=>{return e===new_contact})){
-            User.updateOne({username: username}, {
-              contacts:[...client.contacts, details.username]
-            }).exec();
-            client.contacts.push(details.username);
-            socket.emit('contact list', [...client.contacts]);
-            return;
-          }
-          socket.emit('contact list', [...client.contacts]);
-        }
-        else{
-          socket.emit('contact nonexistent');
-        }
-      });
-      socket.on('who is online', async ()=>{
-        client = await User.findOne({'username':username});
-        let online = [];
-        client.contacts.forEach(c => {
-          if(clientConnections.map(e=>e.username).includes(c)){
-            online.push(c);
-          }
-        });
-        socket.emit('online is', online);
-      });
-      // messages
-      socket.on('new message', async (msg, to, timestamp)=>{
-        const receiverSocket = clientConnections.find(e=>e.username===to);
-        if(receiverSocket){
-          const details = await User.findOne({'username':to});
-          if(details){
-            if(!details.contacts.includes(username)){
-              receiverSocket.id.emit('contact list', [...details.contacts, username]);
-              User.updateOne({username: to}, {
-                contacts:[...details.contacts, username]
-              }).exec();
-              //receiverSocket.id.emit('online is', [username]);
-            }
-          }
-          receiverSocket.id.emit('incoming message', {content:msg, sender:client.username, to:to, timestamp:timestamp})
-          socket.emit('msg sent', to);
-        }else{
-          console.log('not online: ' + to);
-          socket.emit('msg not sent', to);
-        }
-      })
-      
-    }
+    connections.append(socket);
   });
-}catch{
-
+}catch(err){
+  console.log(err)
 }
+
 /*
 socketio.on('connection', async (socket) => {
   console.log('conn');
