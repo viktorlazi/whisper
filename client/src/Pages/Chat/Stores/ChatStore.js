@@ -86,6 +86,7 @@ export default class ChatStore{
             = onlineContact?this.cryptoStore.getSharedSecret(onlineContact.publicKey):null;
           });
         });
+        console.log(toJS(this.contacts));
       });
       this.socketService.socket.on('incoming message', (msg)=>{
         runInAction(()=>{

@@ -19,8 +19,9 @@ export default class BodyStore{
   setNewMessage = (x) =>{
     this.newMessage = x;
   }
-  encryptMessage = (msg, key) =>{
-
+  encryptMessage = () =>{
+    const encryptionKey = this.getSharedSecret();
+    return CryptoJS.AES.encrypt(this.newMessage, encryptionKey.toString()).toString();
   }
   decryptMessage = (msg) =>{
     const encryptionKey = this.getSharedSecret();
@@ -29,9 +30,8 @@ export default class BodyStore{
   sendMessage = (e) =>{
     e.preventDefault();
     if(this.newMessage){
-      this.appendMessage({content:this.newMessage, sender:null, to:this.name, timestamp:1000});
-      const encryptionKey = this.getSharedSecret();
-      const encryptedMessage = CryptoJS.AES.encrypt(this.newMessage, encryptionKey.toString()).toString();
+      const encryptedMessage = this.encryptMessage();
+      this.appendMessage({content:encryptedMessage, sender:null, to:this.name, timestamp:1000});
       this.socketService.socket.emit('new message', encryptedMessage, this.name, 1000);
     }
     this.newMessage = '';
