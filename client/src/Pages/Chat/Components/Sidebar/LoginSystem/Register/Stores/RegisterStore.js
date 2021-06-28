@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import RegisterService from '../Services/RegisterService';
 
 export default class RegisterStore{
@@ -35,6 +35,9 @@ export default class RegisterStore{
       }else{
         this.setPassword('');
         this.setRepeatPassword('');
+        runInAction(()=>{
+          this.errorMessage = result.error;
+        });
         return {success: false, err: result.error}
       }
     }

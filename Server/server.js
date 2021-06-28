@@ -46,7 +46,7 @@ try{
   socketio.on('connection', async (socket)=>{
     const username = getUsername(socket.handshake.auth.token);
     if(username){
-      const client = await User.findOne({'username':username});
+      let client = await User.findOne({'username':username});
       // connections
       socket.on('my public key', (pk)=>{
         console.log(pk);
@@ -78,7 +78,8 @@ try{
           socket.emit('contact nonexistent');
         }
       });
-      socket.on('who is online', ()=>{
+      socket.on('who is online', async ()=>{
+        client = await User.findOne({'username':username});
         let online = [];
         client.contacts.forEach(c => {
           if(clientConnections.map(e=>e.username).includes(c)){
@@ -88,10 +89,20 @@ try{
         socket.emit('online is', online);
       });
       // messages
-      socket.on('new message', (msg, to, timestamp)=>{
+      socket.on('new message', async (msg, to, timestamp)=>{
         const receiverSocket = clientConnections.find(e=>e.username===to);
         if(receiverSocket){
-          receiverSocket.id.emit('incoming message', {content:msg, sender:client.username, timestamp:timestamp})
+          const details = await User.findOne({'username':to});
+          if(details){
+            if(!details.contacts.includes(username)){
+              receiverSocket.id.emit('contact list', [...details.contacts, username]);
+              User.updateOne({username: to}, {
+                contacts:[...details.contacts, username]
+              }).exec();
+              //receiverSocket.id.emit('online is', [username]);
+            }
+          }
+          receiverSocket.id.emit('incoming message', {content:msg, sender:client.username, to:to, timestamp:timestamp})
           socket.emit('msg sent', to);
         }else{
           console.log('not online: ' + to);
