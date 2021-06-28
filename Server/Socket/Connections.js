@@ -23,8 +23,9 @@ export default class Connections{
       let online = [];
       if(client.getContacts()){
         client.getContacts().forEach(c => {
-          if(this.list.map(e=>e.username).includes(c)){
-            online.push(c);
+          const connectedContact = this.list.find(e=>e.username === c);
+          if(connectedContact){
+            online.push({username: c, publicKey: connectedContact.publicKey});
           }
         });
         client.socket.emit('online is', online);

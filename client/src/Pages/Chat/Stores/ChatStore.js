@@ -75,11 +75,11 @@ export default class ChatStore{
       this.socketService.socket.on('online is', (online)=>{
         runInAction(()=>{
           this.contacts.forEach(e => {
-            if(online.includes(e.name)){
-              this.contacts[this.contacts.indexOf(e)].online = true;
-            }else{
-              this.contacts[this.contacts.indexOf(e)].online = false;
-            }
+            const onlineContact = online.find(i=>i.username === e.name);
+            this.contacts[this.contacts.indexOf(e)].online 
+            = onlineContact? true:false;
+            this.contacts[this.contacts.indexOf(e)].publicKey
+            = onlineContact?onlineContact.publicKey:null;
           });
         });
       });
