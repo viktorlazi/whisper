@@ -27,7 +27,11 @@ export default class ChatStore{
     return this.messages;
   }
   getSharedSecret = (username) =>{
-    return this.contacts.find(e=>e.name === username).sharedSecret;
+    const findContactByUsername = this.contacts.find(e=>e.name === username);
+    if(findContactByUsername){
+      return findContactByUsername.sharedSecret;
+    }
+    return null;
   }
   getContactErrMsg = () =>{
     return this.contactErr;

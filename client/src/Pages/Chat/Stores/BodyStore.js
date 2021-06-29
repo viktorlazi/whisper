@@ -1,5 +1,5 @@
 import {makeAutoObservable} from 'mobx';
-import CryptoJS from 'crypto-js';
+import CryptoJS, { enc } from 'crypto-js';
 
 export default class BodyStore{
   name;
@@ -21,11 +21,17 @@ export default class BodyStore{
   }
   encryptMessage = () =>{
     const encryptionKey = this.getSharedSecret();
-    return CryptoJS.AES.encrypt(this.newMessage, encryptionKey.toString()).toString();
+    if(encryptionKey){
+      return CryptoJS.AES.encrypt(this.newMessage, encryptionKey.toString()).toString();
+    }
+    return null;
   }
   decryptMessage = (msg) =>{
     const encryptionKey = this.getSharedSecret();
-    return CryptoJS.AES.decrypt(msg, encryptionKey.toString()).toString(CryptoJS.enc.Utf8);
+    if(encryptionKey){
+      return CryptoJS.AES.decrypt(msg, encryptionKey.toString()).toString(CryptoJS.enc.Utf8);
+    }
+    return null;
   }
   sendMessage = (e) =>{
     e.preventDefault();
