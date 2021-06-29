@@ -22,14 +22,14 @@ export default class BodyStore{
   encryptMessage = () =>{
     const encryptionKey = this.getSharedSecret();
     if(encryptionKey){
-      return CryptoJS.AES.encrypt(this.newMessage, encryptionKey.toString()).toString();
+      return CryptoJS.AES.encrypt(JSON.stringify({msg:this.newMessage}), encryptionKey.toString()).toString();
     }
     return null;
   }
   decryptMessage = (msg) =>{
     const encryptionKey = this.getSharedSecret();
     if(encryptionKey){
-      return CryptoJS.AES.decrypt(msg, encryptionKey.toString()).toString(CryptoJS.enc.Utf8);
+      return JSON.parse(CryptoJS.AES.decrypt(msg, encryptionKey.toString()).toString(CryptoJS.enc.Utf8)).msg;
     }
     return null;
   }

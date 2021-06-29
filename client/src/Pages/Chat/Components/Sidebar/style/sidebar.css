@@ -4,6 +4,7 @@
   flex-direction: column;
   flex:0.15;
   height:100vh;
+  padding-top: 20px;
 }
 .sidebar_header{
   display:flex;
