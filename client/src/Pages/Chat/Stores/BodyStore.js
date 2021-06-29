@@ -1,5 +1,5 @@
 import {makeAutoObservable} from 'mobx';
-import CryptoJS, { enc } from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 export default class BodyStore{
   name;
