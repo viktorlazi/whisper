@@ -2,6 +2,7 @@ import Authenticated from './Authenticated';
 import NotAuthenticated from './NotAuthenticated';
 import TokenStore from './Stores/TokenStore';
 import {observer} from 'mobx-react';
+import AliceAndBob from './AliceAndBob';
 
 const tokenStore = new TokenStore();
 
@@ -11,7 +12,10 @@ function LoginSystem() {
       {
         tokenStore.token?
         <Authenticated clearToken={tokenStore.clearToken} />
-        :<NotAuthenticated setToken={(x)=>tokenStore.setToken(x)} />
+        :
+        [<NotAuthenticated setToken={(x)=>tokenStore.setToken(x)} />,
+        <AliceAndBob />]
+
       }
     </div>
   )

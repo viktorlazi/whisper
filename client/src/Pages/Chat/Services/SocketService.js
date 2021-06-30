@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
+import routes from '../../../webRoutes.js';
 
-const webSocketAddress = 'http://127.0.0.1:4000';
+const webSocketAddress = routes.webSocket;
 
 export default class SocketService{
   socket;

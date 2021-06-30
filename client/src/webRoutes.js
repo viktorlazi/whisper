@@ -1,5 +1,6 @@
 const routes = {
-  serverApi: 'http://localhost:4000/api',
-  app: 'http://localhost:3000/#'
+  serverApi: 'http://viktorlazi.com/apps/whisper/api',
+  app: 'http://viktorlazi.com/apps/whisper',
+  webSocket: '/'
 };
 export default routes;
